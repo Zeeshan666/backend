@@ -18,9 +18,6 @@ const usersSchema = new Schema({
     type: String,
     enum: ['Pending', 'Active'],
     default: 'Pending'
-  }, confirmationCode: {
-    type: String,
-    unique: true
   }
 }, { timestamps: true });
 
@@ -43,8 +40,7 @@ usersSchema.statics.signup = async function (req, res) {
   //creating hash with 10rounds which takes time 4ms 
   const genrateSalt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, genrateSalt);
-  const token = createToken(email);
-  const user = await this.create({ email, password: hash, status: 'Pending', confirmationCode: token })
+  const user = await this.create({ email, password: hash, status: 'Pending' })
   return user;
 
 };
